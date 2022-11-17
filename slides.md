@@ -244,6 +244,7 @@ layout: two-cols
 
   Add `trpc-nuxt` to your nuxt.config.ts:
   ```ts
+  // nuxt.config.ts
   export default defineNuxtConfig({
     modules: ['trpc-nuxt/module'],
     typescript: {
@@ -332,7 +333,8 @@ layout: two-cols
 clicks: 4
 ---
 
-```ts {all|1-2|4-5|6-10|11-16|all}
+```ts {all|2-3|5-6|7-11|12-17|all}
+// server/trpc/routers/helloRouter.ts
 import { z } from 'zod'
 import { router, procedure } from '../trpc'
 
@@ -379,7 +381,8 @@ layout: two-cols
 clicks: 3
 ---
 
-```ts {all|4-5|11-19|all}
+```ts {all|5-6|12-20|all}
+// server/trpc/routers/authRouter.ts
 import { z } from 'zod'
 import { router, procedure } from '../trpc'
 
