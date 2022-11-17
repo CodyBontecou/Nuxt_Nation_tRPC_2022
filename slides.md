@@ -64,14 +64,10 @@ title: So... what is end-to-end type safety?
 End-to-end type safety is having a single source of truth for your types across all layers of your application.
 </p>
 
-<!-- TODO: Get this image back -->
 <img v-click class="w-screen" src="/db-server-client.png" alt="">
 
-::right::
-
-<h2 class="pb-2" v-click>How it's typically solved</h2>
-
 <v-click>
+
 ```sql
 // prisma.schema
 model User {
@@ -80,37 +76,49 @@ model User {
   lastName  String
 }
 ```
+
+</v-click>
+::right::
+
+<div class="ml-4">
+
+<v-click>
+
+```ts
+// server/api/getUsers
+interface User {
+  id: string
+  firstName: string
+  lastName: string
+}
+
+export default defineEventHandler(async event => {
+  ...
+})
+```
+
 </v-click>
 
-<!-- TODO: Write proper getUser endpoint -->
-<!-- TODO: Define User interface in server -->
-<v-click>
-```ts
-// server/api
-module.exports = async function (fastify, opts) {
-  fastify.get('/', async function (request, reply) {
-    return 'this main'
-  })
-}
-```
-</v-click> 
-
-<!-- TODO: Write proper fetch -->
-<!-- TODO: Define User interface in frontend -->
 <v-click>
 ```js
 // pages/index.vue
 <script setup lang="ts">
-  const user: User = await fetch('/getUser')
+  interface User {
+    id: string
+    firstName: string
+    lastName: string
+  }
+  const { data: user } : User = await useFetch('/getUsers')
   const fullName = `${user.firstName} ${user.lastName}`
 </script>
 
 <template>
-{{ fullName }}
+  {{ fullName }}
 </template>
 ```
 </v-click>
 
+</div>
 <!--
 Each layer must maintain their type and communicate it to other developers.
 
@@ -131,7 +139,7 @@ Layers of a fullstack application may include:
 layout: two-cols
 ---
 
-<h2 class="ml-2 mb-[2.75rem]">The problem...</h2>
+<h2 class="mb-[2.75rem]">The problem...</h2>
 
 <v-click>
 ```sql
@@ -160,22 +168,30 @@ model User {
 <h2 v-click class="ml-2">What if a type is changed upstream?</h2>
 
 <div v-click class="flex flex-col ml-2">
-  <!-- TODO: Write proper getUser endpoint -->
 
   ```ts
-  // server/api
-  module.exports = async function (fastify, opts) {
-    fastify.get('/', async function (request, reply) {
-      return 'this main'
-    })
+  // server/api/getUsers
+  interface User {
+    id: string
+    firstName: string
+    lastName: string
   }
+
+  export default defineEventHandler(async event => {
+    ...
+  })
+
   ```
 
-  <!-- TODO: Write proper fetch -->
-  ```js
+  ```ts
   // pages/index.vue
   <script setup lang="ts">
-    const user: User = await fetch('/getUser')
+    interface User {
+      id: string
+      firstName: string
+      lastName: string
+    }
+    const { data: user } : User = await useFetch('/getUsers')
     const fullName = `${user.firstName} ${user.lastName}`
   </script>
 
@@ -198,8 +214,6 @@ model User {
 ---
 layout: fact
 ---
-
-<!-- TODO: Add little drumroll gif with v-click -->
 
 <h1 class="text-lg font-semibold">tRPC to the rescue!</h1>
 
@@ -293,8 +307,6 @@ export const procedure = t.procedure
 </div>
 ::right::
 
-<!-- TODO: All options -->
-<!-- TODO: Make sure all ml in two-cols is equal to four -->
 <div class="ml-4 flex flex-col h-full justify-center text-sm">
   <p v-click-hide="1">Create the t-object and extract the helpers you plan on using.</p>
   <ul v-click-hide="1">
@@ -424,6 +436,7 @@ layout: two-cols
 <div class="flex w-full h-full items-center justify-center">
 
 ```ts
+// server/api/[trpc].ts
 import { createNuxtApiHandler } from 'trpc-nuxt'
 import { appRouter } from '@/server/trpc/routers'
 // export API handler
