@@ -536,3 +536,51 @@ layout: fact
 
 - Live Code?
 -->
+
+---
+layout: default
+---
+
+<div class="flex items-center justify-center h-[99%]">
+  <video controls class="rounded shadow-xl">
+    <source src="/trpc-autocomplete.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- 
+We are now providing our frontend with our API router's type definition, providing full typesafety and autocompletion. 
+-->
+
+---
+layout: default
+---
+
+<div class="flex items-center justify-center h-[99%]">
+  <video controls class="rounded shadow-xl">
+    <source src="/function_clickthrough.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!--
+I am able to command click into the trpc object from my client code to find the endpoint definition that's happening in my server.
+-->
+
+---
+layout: default
+---
+
+<div class="flex items-center justify-center h-[99%]">
+  <video controls class="rounded shadow-xl">
+    <source src="/refactor_example.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- 
+Here, you can see me refactoring server logic from within my template.
+
+I'm changing the input parameter name from greeting to text and this smartly cascades to other areas o within trpc that depend on the parameter.
+
+You can also refactor the procedure name doing the same!
+
+Unfortunately, I found this bug that requires a page refresh. I'll post an issue after this talk. Give trpc-nuxt some love and submit issues, prs, and attention!
+-->
